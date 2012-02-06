@@ -1,6 +1,8 @@
 package org.decibeltechnology.decibel.ui.actions;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 import org.decibeltechnology.decibel.DecibelPhpFrameworkProvider;
 import org.decibeltechnology.decibel.DecibelToolkit;
@@ -28,36 +30,42 @@ public final class ClearCacheAction extends BaseAction implements ActionListener
 
 	private static final ClearCacheAction INSTANCE = new ClearCacheAction();
 
-    private ClearCacheAction() {
-    }
+	private ClearCacheAction() {
+	}
 
-    public static ClearCacheAction getInstance() {
-        return INSTANCE;
-    }
+	public static ClearCacheAction getInstance() {
+		return INSTANCE;
+	}
 
-    @Override
-    public void actionPerformed(PhpModule phpModule) {
+	@Override
+	public void actionPerformed(PhpModule phpModule) {
 
-        if (!DecibelPhpFrameworkProvider.getInstance().isInPhpModule(phpModule)) {
-            return;
-        }
+		if (!DecibelPhpFrameworkProvider.getInstance().isInPhpModule(phpModule)) {
+			return;
+		}
 
-        FrameworkCommandSupport commandSupport = DecibelPhpFrameworkProvider.getInstance().getFrameworkCommandSupport(phpModule);
-        Callable<Process> callable = commandSupport.createCommand(DecibelToolkit.CMD_CLEAR_CACHE);
-        ExecutionDescriptor descriptor = commandSupport.getDescriptor();
-        String displayName = commandSupport.getOutputTitle(DecibelToolkit.CMD_CLEAR_CACHE);
-        ExecutionService service = ExecutionService.newService(callable, descriptor, displayName);
-        service.run();
-    }
+		// Add the application source directory as the first parameter for the task.
+		ArrayList<String> commandParams = new ArrayList<String>(Arrays.asList(
+				phpModule.getSourceDirectory().getNameExt()));
+		String[] params = new String[commandParams.size()];
+		commandParams.toArray(params);
+		
+		FrameworkCommandSupport commandSupport = DecibelPhpFrameworkProvider.getInstance().getFrameworkCommandSupport(phpModule);
+		Callable<Process> callable = commandSupport.createCommand(DecibelToolkit.CMD_CLEAR_CACHE, params);
+		ExecutionDescriptor descriptor = commandSupport.getDescriptor();
+		String displayName = commandSupport.getOutputTitle(DecibelToolkit.CMD_CLEAR_CACHE);
+		ExecutionService service = ExecutionService.newService(callable, descriptor, displayName);
+		service.run();
+	}
 
-    @Override
-    protected String getPureName() {
-        return NbBundle.getMessage(ClearCacheAction.class, "LBL_ClearCache");
-    }
+	@Override
+	protected String getPureName() {
+		return NbBundle.getMessage(ClearCacheAction.class, "LBL_ClearCache");
+	}
 
-    @Override
-    protected String getFullName() {
-        return NbBundle.getMessage(ClearCacheAction.class, "LBL_DecibelAction", getPureName());
-    }
+	@Override
+	protected String getFullName() {
+		return NbBundle.getMessage(ClearCacheAction.class, "LBL_DecibelAction", getPureName());
+	}
 
 }

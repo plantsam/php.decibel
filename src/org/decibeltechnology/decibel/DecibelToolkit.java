@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import org.decibeltechnology.decibel.commands.DecibelCommand;
 import org.decibeltechnology.decibel.commands.DecibelCommandSupport;
 import org.decibeltechnology.decibel.ui.options.DecibelOptions;
 import org.netbeans.api.extexecution.ExecutionDescriptor;
@@ -17,7 +18,6 @@ import org.netbeans.modules.php.api.phpmodule.PhpModule;
 import org.netbeans.modules.php.api.phpmodule.PhpProgram;
 import org.netbeans.modules.php.api.util.FileUtils;
 import org.netbeans.modules.php.api.util.UiUtils;
-import org.netbeans.modules.php.spi.commands.FrameworkCommand;
 import org.netbeans.modules.php.spi.commands.FrameworkCommandSupport;
 import org.openide.util.NbBundle;
 import org.openide.windows.InputOutput;
@@ -119,25 +119,26 @@ public class DecibelToolkit extends PhpProgram {
 //        runService(processBuilder, executionDescriptor, commandSupport.getOutputTitle(CMD_INIT_APP, cmdParams), true);
 //    }
 
-    public static String getHelp(PhpModule phpModule, FrameworkCommand command) {
-        assert phpModule != null;
-        assert command != null;
+    public static String getHelp(PhpModule phpModule, DecibelCommand command) {
+		
+		assert phpModule != null;
+		assert command != null;
 
-        FrameworkCommandSupport commandSupport = DecibelPhpFrameworkProvider.getInstance().getFrameworkCommandSupport(phpModule);
-        ExternalProcessBuilder processBuilder = commandSupport.createSilentCommand("?", command.getCommands()); // NOI18N
-        assert processBuilder != null;
+		FrameworkCommandSupport commandSupport = DecibelPhpFrameworkProvider.getInstance().getFrameworkCommandSupport(phpModule);
+		ExternalProcessBuilder processBuilder = commandSupport.createSilentCommand("?", command.getTask()); // NOI18N
+		assert processBuilder != null;
 
-        final HelpLineProcessor lineProcessor = new HelpLineProcessor();
-        ExecutionDescriptor executionDescriptor = new ExecutionDescriptor()
-                .inputOutput(InputOutput.NULL)
-                .outProcessorFactory(new ExecutionDescriptor.InputProcessorFactory() {
-            @Override
-            public InputProcessor newInputProcessor(InputProcessor defaultProcessor) {
-                return InputProcessors.ansiStripping(InputProcessors.bridge(lineProcessor));
-            }
-        });
-        runService(processBuilder, executionDescriptor, "getting help for: " + command.getPreview(), true); // NOI18N
-        return lineProcessor.getHelp();
+		final HelpLineProcessor lineProcessor = new HelpLineProcessor();
+		ExecutionDescriptor executionDescriptor = new ExecutionDescriptor()
+				.inputOutput(InputOutput.NULL)
+				.outProcessorFactory(new ExecutionDescriptor.InputProcessorFactory() {
+			@Override
+			public InputProcessor newInputProcessor(InputProcessor defaultProcessor) {
+				return InputProcessors.ansiStripping(InputProcessors.bridge(lineProcessor));
+			}
+		});
+		runService(processBuilder, executionDescriptor, "getting help for: " + command.getPreview(), true); // NOI18N
+		return lineProcessor.getHelp();
     }
 
     static <T> T[] mergeArrays(T[]... arrays) {

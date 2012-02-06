@@ -1,4 +1,7 @@
 Manifest-Version: 1.0
 OpenIDE-Module: org.decibeltechnology.decibel
+OpenIDE-Module-Name: Decibel Web Platform
+OpenIDE-Module-Short-Description: Provides support for Decibel Web Platform projects within the NetBeans IDE
+OpenIDE-Module-Display-Category: PHP
 OpenIDE-Module-Localizing-Bundle: org/decibeltechnology/decibel/Bundle.properties
 OpenIDE-Module-Specification-Version: 1.0.0

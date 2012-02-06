@@ -38,12 +38,14 @@ public final class DecibelCommandSupport extends FrameworkCommandSupport {
 
     @Override
     public void runCommand(CommandDescriptor commandDescriptor) {
-		String[] params = commandDescriptor.getCommandParams();
-//		params = Arrays.<String>asList(
-//			phpModule.getSourceDirectory().getNameExt()
-//		).toArray(params);
-		//String[] params = commandDescriptor.getCommandParams();
-		
+
+		// Add the application source directory as the first parameter for the task.
+		ArrayList<String> commandParams = new ArrayList<String>(Arrays.asList(
+				commandDescriptor.getCommandParams()));
+		commandParams.add(0, phpModule.getSourceDirectory().getNameExt());
+		String[] params = new String[commandParams.size()];
+		commandParams.toArray(params);
+
         Callable<Process> callable = createCommand(commandDescriptor.getFrameworkCommand().getCommands(), params);
         ExecutionDescriptor descriptor = getDescriptor();
         String displayName = getOutputTitle(commandDescriptor);
