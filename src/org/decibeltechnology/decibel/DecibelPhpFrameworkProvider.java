@@ -25,7 +25,6 @@ import org.openide.util.NbBundle;
 
 public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 
-	public static final String FILE_CONFIG = "_config/config.db.php"; // NOI18N
 	public static final String FILE_DECIBEL = "app/decibel/Decibel.php"; // NOI18N
 	public static final String FILE_ROUTER = "app/decibel/router/DRouter.php"; // NOI18N
 
@@ -112,12 +111,20 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 		
 		List<File> files = new LinkedList<File>();
 		FileObject appConfig = phpModule.getSourceDirectory().getFileObject("_config"); // NOI18N
-		if (appConfig != null) {
+		FileObject appLicence = phpModule.getSourceDirectory().getFileObject("app"); // NOI18N
+		if (appConfig != null || appLicence != null) {
 			
 			List<FileObject> fileObjects = new LinkedList<FileObject>();
 			for (FileObject child : appConfig.getChildren()) {
 				if (VisibilityQuery.getDefault().isVisible(child)) {
 					if (child.isData() && FileUtils.isPhpFile(child)) {
+						fileObjects.add(child);
+					}
+				}
+			}
+			for (FileObject child : appLicence.getChildren()) {
+				if (VisibilityQuery.getDefault().isVisible(child)) {
+					if (child.isData() && child.getExt().equals("licence")) {
 						fileObjects.add(child);
 					}
 				}

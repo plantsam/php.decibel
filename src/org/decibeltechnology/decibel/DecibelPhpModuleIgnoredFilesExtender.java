@@ -19,8 +19,8 @@ public class DecibelPhpModuleIgnoredFilesExtender extends PhpModuleIgnoredFilesE
 		
 		defaultIgnores.add(new File(sourcePath + "/_config/DConfigurationManager"));
 		defaultIgnores.add(new File(sourcePath + "/_temp"));
-		defaultIgnores.add(new File(sourcePath + "/app/decibel"));
-		defaultIgnores.add(new File(sourcePath + "/app/DecibelCMS"));
+		//defaultIgnores.add(new File(sourcePath + "/app/decibel"));
+		//defaultIgnores.add(new File(sourcePath + "/app/DecibelCMS"));
 
     }
 
