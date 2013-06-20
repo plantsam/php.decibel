@@ -4,12 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.Action;
 import org.decibeltechnology.decibel.ui.actions.*;
-import org.decibeltechnology.decibel.util.DecibelUtils;
-import org.netbeans.modules.php.spi.actions.GoToActionAction;
-import org.netbeans.modules.php.spi.actions.GoToViewAction;
-import org.netbeans.modules.php.spi.actions.RunCommandAction;
-import org.netbeans.modules.php.spi.phpmodule.PhpModuleActionsExtender;
-import org.openide.filesystems.FileObject;
+import org.netbeans.modules.php.spi.framework.actions.RunCommandAction;
+import org.netbeans.modules.php.spi.framework.PhpModuleActionsExtender;
 import org.openide.util.NbBundle;
 
 public class DecibelPhpModuleActionsExtender extends PhpModuleActionsExtender {
@@ -29,26 +25,6 @@ public class DecibelPhpModuleActionsExtender extends PhpModuleActionsExtender {
 	@Override
 	public RunCommandAction getRunCommandAction() {
 		return DecibelRunCommandAction.getInstance();
-	}
-
-	@Override
-	public boolean isViewWithAction(FileObject fo) {
-		return DecibelUtils.isViewWithAction(fo);
-	}
-
-	@Override
-	public boolean isActionWithView(FileObject fo) {
-		return DecibelUtils.isAction(fo);
-	}
-
-	@Override
-	public GoToActionAction getGoToActionAction(FileObject fo, int offset) {
-		return new DecibelGoToActionAction(fo);
-	}
-
-	@Override
-	public GoToViewAction getGoToViewAction(FileObject fo, int offset) {
-		return new DecibelGoToViewAction(fo, offset);
 	}
 
 }

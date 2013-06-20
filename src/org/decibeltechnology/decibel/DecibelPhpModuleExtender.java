@@ -6,11 +6,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
+import org.netbeans.modules.php.api.executable.InvalidPhpExecutableException;
 import org.decibeltechnology.decibel.ui.wizards.NewProjectConfigurationPanel;
-import org.netbeans.modules.php.api.phpmodule.PhpInterpreter;
+import org.netbeans.modules.php.api.executable.PhpInterpreter;
 import org.netbeans.modules.php.api.phpmodule.PhpModule;
-import org.netbeans.modules.php.api.phpmodule.PhpProgram.InvalidPhpProgramException;
-import org.netbeans.modules.php.spi.phpmodule.PhpModuleExtender;
+import org.netbeans.modules.php.spi.framework.PhpModuleExtender;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
@@ -25,28 +25,24 @@ public class DecibelPhpModuleExtender extends PhpModuleExtender {
 
     @Override
     public Set<FileObject> extend(PhpModule phpModule) throws ExtendingException {
-		
+
         // Load the Decibel Toolkit.
         DecibelToolkit toolkit = null;
         try {
             toolkit = DecibelToolkit.getDefault();
-			
-		// The IDE should have already checked that a valid toolkit exists, 
+
+		// The IDE should have already checked that a valid toolkit exists,
 		// so this exception should never occur - but catch it just in case.
-        } catch (InvalidPhpProgramException ex) {
+        } catch (InvalidPhpExecutableException ex) {
             Exceptions.printStackTrace(ex);
         }
-		
-		// Once again, asset the toolkit is valid in case something went
-		// wrong higher up the chain.
-        assert toolkit.isValid() : "Decibel Toolkit must be valid";
 
 		// Initialise the project using Decibel Toolkit.
-        if (!toolkit.initProject(phpModule, getPanel().getProjectParams())) {
-            Logger.getLogger(DecibelPhpModuleExtender.class.getName())
-                    .log(Level.INFO, "Decibel Web Platform not found in newly created project {0}", phpModule.getDisplayName());
-            throw new ExtendingException(NbBundle.getMessage(DecibelPhpModuleExtender.class, "MSG_NotExtended"));
-        }
+//        if (!toolkit.initProject(phpModule, getPanel().getProjectParams())) {
+//            Logger.getLogger(DecibelPhpModuleExtender.class.getName())
+//                    .log(Level.INFO, "Decibel Framework not found in newly created project {0}", phpModule.getDisplayName());
+//            throw new ExtendingException(NbBundle.getMessage(DecibelPhpModuleExtender.class, "MSG_NotExtended"));
+//        }
 
         // prefetch commands
         DecibelPhpFrameworkProvider.getInstance().getFrameworkCommandSupport(phpModule).refreshFrameworkCommandsLater(null);
@@ -104,12 +100,12 @@ public class DecibelPhpModuleExtender extends PhpModuleExtender {
     public String getErrorMessage() {
         try {
             PhpInterpreter.getDefault();
-        } catch (InvalidPhpProgramException ex) {
+        } catch (InvalidPhpExecutableException ex) {
             return ex.getLocalizedMessage();
         }
         try {
             DecibelToolkit.getDefault();
-        } catch (InvalidPhpProgramException ex) {
+        } catch (InvalidPhpExecutableException ex) {
             return NbBundle.getMessage(DecibelPhpModuleExtender.class, "MSG_CannotExtend", ex.getMessage());
         }
         return getPanel().getErrorMessage();

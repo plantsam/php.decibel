@@ -6,8 +6,7 @@ import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
 import org.decibeltechnology.decibel.ui.customizer.DecibelCustomizerPanel;
 import org.netbeans.modules.php.api.phpmodule.PhpModule;
-import org.netbeans.modules.php.api.phpmodule.PhpModule.Change;
-import org.netbeans.modules.php.spi.phpmodule.PhpModuleCustomizerExtender;
+import org.netbeans.modules.php.spi.framework.PhpModuleCustomizerExtender;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 

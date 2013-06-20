@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import org.netbeans.modules.php.api.phpmodule.PhpModule;
-import org.netbeans.modules.php.spi.phpmodule.PhpModuleIgnoredFilesExtender;
+import org.netbeans.modules.php.spi.framework.PhpModuleIgnoredFilesExtender;
 
 public class DecibelPhpModuleIgnoredFilesExtender extends PhpModuleIgnoredFilesExtender {
 
@@ -13,10 +13,10 @@ public class DecibelPhpModuleIgnoredFilesExtender extends PhpModuleIgnoredFilesE
     public DecibelPhpModuleIgnoredFilesExtender(PhpModule phpModule) {
 
         assert phpModule != null;
-		
+
 		defaultIgnores = new HashSet<File>();
 		String sourcePath = phpModule.getSourceDirectory().getPath();
-		
+
 		defaultIgnores.add(new File(sourcePath + "/_config/DConfigurationManager"));
 		defaultIgnores.add(new File(sourcePath + "/_temp"));
 		//defaultIgnores.add(new File(sourcePath + "/app/decibel"));

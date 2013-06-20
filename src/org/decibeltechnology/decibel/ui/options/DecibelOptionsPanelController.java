@@ -30,12 +30,14 @@ public class DecibelOptionsPanelController extends OptionsPanelController implem
     @Override
     public void update() {
         decibelOptionsPanel.setDecibel(getOptions().getToolkit());
+
         changed = false;
     }
 
     @Override
     public void applyChanges() {
         getOptions().setToolkit(decibelOptionsPanel.getDecibel());
+
         changed = false;
     }
 
@@ -73,7 +75,7 @@ public class DecibelOptionsPanelController extends OptionsPanelController implem
 
     @Override
     public HelpCtx getHelpCtx() {
-        return new HelpCtx(DecibelOptions.class);
+        return new HelpCtx("org.netbeans.modules.php.symfony.ui.options.DecibelOptions"); // NOI18N
     }
 
     @Override

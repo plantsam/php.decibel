@@ -1,16 +1,14 @@
 package org.decibeltechnology.decibel.ui.actions;
 
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.Callable;
 import org.decibeltechnology.decibel.DecibelPhpFrameworkProvider;
 import org.decibeltechnology.decibel.DecibelToolkit;
-import org.netbeans.api.extexecution.ExecutionDescriptor;
-import org.netbeans.api.extexecution.ExecutionService;
+import org.decibeltechnology.decibel.commands.DecibelCommand;
+import org.netbeans.modules.php.api.executable.InvalidPhpExecutableException;
 import org.netbeans.modules.php.api.phpmodule.PhpModule;
-import org.netbeans.modules.php.spi.actions.BaseAction;
-import org.netbeans.modules.php.spi.commands.FrameworkCommandSupport;
+import org.netbeans.modules.php.api.util.UiUtils;
+import org.netbeans.modules.php.spi.framework.actions.BaseAction;
+import org.netbeans.modules.php.spi.framework.commands.FrameworkCommandSupport;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -44,18 +42,12 @@ public final class ClearCacheAction extends BaseAction implements ActionListener
 			return;
 		}
 
-		// Add the application source directory as the first parameter for the task.
-		ArrayList<String> commandParams = new ArrayList<String>(Arrays.asList(
-				phpModule.getSourceDirectory().getNameExt()));
-		String[] params = new String[commandParams.size()];
-		commandParams.toArray(params);
-		
-		FrameworkCommandSupport commandSupport = DecibelPhpFrameworkProvider.getInstance().getFrameworkCommandSupport(phpModule);
-		Callable<Process> callable = commandSupport.createCommand(DecibelToolkit.CMD_CLEAR_CACHE, params);
-		ExecutionDescriptor descriptor = commandSupport.getDescriptor();
-		String displayName = commandSupport.getOutputTitle(DecibelToolkit.CMD_CLEAR_CACHE);
-		ExecutionService service = ExecutionService.newService(callable, descriptor, displayName);
-		service.run();
+		try {
+			DecibelCommand command = new DecibelCommand(phpModule, "decibel:clear-cache", "Clears the application cache and flushes the shared memory cache.", "decibel:clear-cache");
+			DecibelToolkit.forPhpModule(phpModule, false).runCommand(phpModule, command, null);
+		} catch (InvalidPhpExecutableException ex) {
+			UiUtils.invalidScriptProvided(ex.getLocalizedMessage(), DecibelToolkit.OPTIONS_SUB_PATH);
+		}
 	}
 
 	@Override

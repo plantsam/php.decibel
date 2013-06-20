@@ -26,7 +26,7 @@ import org.openide.util.NbBundle;
  * @author Tomas Mysik
  */
 public class DecibelOptionsPanel extends JPanel {
-	
+
     private final ChangeSupport changeSupport = new ChangeSupport(this);
 
     public DecibelOptionsPanel() {
@@ -212,13 +212,13 @@ public class DecibelOptionsPanel extends JPanel {
                 .setFilesOnly(true)
 				.setFileFilter(new DecibelToolkitFileFilter())
                 .showOpenDialog();
-		
+
 		// If the user has selected a Toolkit instance, use the path.
         if (decibelScript != null) {
             decibelScript = FileUtil.normalizeFile(decibelScript);
             toolkitTextField.setText(decibelScript.getAbsolutePath());
         }
-		
+
     }//GEN-LAST:event_browseButtonActionPerformed
 
     private void searchButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
@@ -251,12 +251,12 @@ public class DecibelOptionsPanel extends JPanel {
             }
 
         });
-		
+
 		// If a Toolkit was found and selected, use the path.
         if (toolkit != null) {
             toolkitTextField.setText(toolkit);
         }
-		
+
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void learnMoreLabelMouseEntered(MouseEvent evt) {//GEN-FIRST:event_learnMoreLabelMouseEntered
@@ -268,7 +268,7 @@ public class DecibelOptionsPanel extends JPanel {
     private void learnMoreLabelMousePressed(MouseEvent evt) {//GEN-FIRST:event_learnMoreLabelMousePressed
 
 		try {
-            URL url = new URL("http://poweredbydecibel.com/"); // NOI18N
+            URL url = new URL("http://www.decibeltechnology.com/"); // NOI18N
             HtmlBrowser.URLDisplayer.getDefault().showURL(url);
         } catch (MalformedURLException ex) {
             Exceptions.printStackTrace(ex);

@@ -6,18 +6,16 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import org.decibeltechnology.decibel.commands.DecibelCommandSupport;
-import org.decibeltechnology.decibel.editor.DecibelEditorExtender;
 import org.decibeltechnology.decibel.ui.options.DecibelOptions;
 import org.netbeans.api.queries.VisibilityQuery;
-import org.netbeans.modules.php.api.phpmodule.BadgeIcon;
+import org.netbeans.modules.php.api.framework.BadgeIcon;
 import org.netbeans.modules.php.api.phpmodule.PhpModule;
 import org.netbeans.modules.php.api.phpmodule.PhpModuleProperties;
 import org.netbeans.modules.php.api.util.FileUtils;
-import org.netbeans.modules.php.spi.editor.EditorExtender;
-import org.netbeans.modules.php.spi.phpmodule.PhpFrameworkProvider;
-import org.netbeans.modules.php.spi.phpmodule.PhpModuleActionsExtender;
-import org.netbeans.modules.php.spi.phpmodule.PhpModuleExtender;
-import org.netbeans.modules.php.spi.phpmodule.PhpModuleIgnoredFilesExtender;
+import org.netbeans.modules.php.spi.framework.PhpFrameworkProvider;
+import org.netbeans.modules.php.spi.framework.PhpModuleActionsExtender;
+import org.netbeans.modules.php.spi.framework.PhpModuleExtender;
+import org.netbeans.modules.php.spi.framework.PhpModuleIgnoredFilesExtender;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.ImageUtilities;
@@ -29,7 +27,7 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 	public static final String FILE_ROUTER = "app/decibel/router/DRouter.php"; // NOI18N
 
 	private static final String ICON_PATH = "org/decibeltechnology/decibel/ui/resources/decibel_badge_8.png"; // NOI18N
-	
+
 	private static final DecibelPhpFrameworkProvider INSTANCE = new DecibelPhpFrameworkProvider();
 
 	private final BadgeIcon badgeIcon;
@@ -41,10 +39,10 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 
 	private DecibelPhpFrameworkProvider() {
 
-		super("Decibel Web Platform", // NOI18N
+		super("Decibel Framework", // NOI18N
 			NbBundle.getMessage(DecibelPhpFrameworkProvider.class, "LBL_FrameworkName"),
 			NbBundle.getMessage(DecibelPhpFrameworkProvider.class, "LBL_FrameworkDescription"));
-		
+
 		badgeIcon = new BadgeIcon(
 			ImageUtilities.loadImage(ICON_PATH),
 			DecibelPhpFrameworkProvider.class.getResource("/" + ICON_PATH)); // NOI18N
@@ -53,8 +51,8 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 
 	/**
 	 * Returns the badge icon that will be used in the interface to show
-	 * this is a Decibel Web Platform project.
-	 * 
+	 * this is a Decibel project.
+	 *
 	 * @since	1.0.0
 	 */
 	@Override
@@ -86,34 +84,34 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 	}
 
 	/**
-	 * Determine if the provided project is a Decibel Web Platform project.
-	 * 
+	 * Determine if the provided project is a Decibel project.
+	 *
 	 * @param	phpModule	The project to test.
 	 * @since	1.0.0
 	 */
 	@Override
 	public boolean isInPhpModule(PhpModule phpModule) {
-		
+
 		FileObject decibel = locate(phpModule, FILE_DECIBEL, false);
 		return (decibel != null && decibel.isData());
-		
+
 	} // end function isInPhpModule.
 
 	/**
-	 * Returns an array containing all configuration files for this 
-	 * Decibel Web Platform project.
-	 * 
+	 * Returns an array containing all configuration files for this
+	 * Decibel project.
+	 *
 	 * @param	phpModule	The project to test.
 	 * @since	1.0.0
 	 */
 	@Override
 	public File[] getConfigurationFiles(PhpModule phpModule) {
-		
+
 		List<File> files = new LinkedList<File>();
 		FileObject appConfig = phpModule.getSourceDirectory().getFileObject("_config"); // NOI18N
 		FileObject appLicence = phpModule.getSourceDirectory().getFileObject("app"); // NOI18N
 		if (appConfig != null || appLicence != null) {
-			
+
 			List<FileObject> fileObjects = new LinkedList<FileObject>();
 			for (FileObject child : appConfig.getChildren()) {
 				if (VisibilityQuery.getDefault().isVisible(child)) {
@@ -129,7 +127,7 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 					}
 				}
 			}
-			
+
 			Collections.sort(fileObjects, new Comparator<FileObject>() {
 				@Override
 				public int compare(FileObject o1, FileObject o2) {
@@ -141,15 +139,15 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 				files.add(FileUtil.toFile(fo));
 			}
 		}
-		
+
 		return files.toArray(new File[files.size()]);
-		
+
 	} // end function getConfigurationFiles.
 
 	/**
-	 * Override properties for this project where they are a part of the
-	 * Decibel Web Platform core.
-	 * 
+	 * Override properties for this project where they are a part
+	 * of the Decibel core.
+	 *
 	 * @param	phpModule	The project to return properties for.
 	 * @since	1.0.0
 	 * @todo	This doesn't seem to work?
@@ -158,19 +156,19 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 	public PhpModuleProperties getPhpModuleProperties(PhpModule phpModule) {
 
 		PhpModuleProperties properties = new PhpModuleProperties();
-		
+
 		// Add code completion in the toolkit to the include path.
         String decibel = DecibelOptions.getInstance().getToolkit();
 		List<String> includePath = new LinkedList<String>();
 		includePath.add(decibel + "/_decibel/hint");
 		properties = properties.setIncludePath(includePath);
-		
+
 		// Set index file.
         FileObject indexFile = locate(phpModule, FILE_ROUTER, true); // NOI18N
 		if (properties != null) {
 			properties = properties.setIndexFile(indexFile);
 		}
-		
+
 		return properties;
 
 	} //  end function getPhpModuleProperites.
@@ -193,11 +191,6 @@ public final class DecibelPhpFrameworkProvider extends PhpFrameworkProvider {
 	@Override
 	public DecibelCommandSupport getFrameworkCommandSupport(PhpModule phpModule) {
 		return new DecibelCommandSupport(phpModule);
-	}
-
-	@Override
-	public EditorExtender getEditorExtender(PhpModule phpModule) {
-		return new DecibelEditorExtender();
 	}
 
 } // end class DecibelPhpFrameworkProvider.
